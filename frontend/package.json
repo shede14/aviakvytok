@@ -1,0 +1,24 @@
+{
+  "name": "aviakvytok-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "description": "АвіаКвиток — клієнтська частина на Vue 3 (ЛР4)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:spring": "vite build --outDir ../src/main/resources/static --emptyOutDir",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.13.0",
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "vite": "^6.4.1"
+  }
+}

@@ -1,0 +1,102 @@
+:root {
+  --brand: #1d4e89;
+  --brand-dark: #143a68;
+  --brand-soft: #e8f0fa;
+}
+
+body {
+  background: #f5f7fb;
+  color: #212529;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.navbar-brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: #fff;
+  color: var(--brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-brand {
+  background: var(--brand) !important;
+}
+
+.btn-brand {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+
+.btn-brand:hover,
+.btn-brand:focus {
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
+  color: #fff;
+}
+
+.hero {
+  background: linear-gradient(120deg, var(--brand) 0%, #2f6db3 100%);
+  color: #fff;
+  border-radius: 1rem;
+}
+
+.stat-card .stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--brand-soft);
+  color: var(--brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.route-line {
+  flex: 1;
+  border-top: 2px dashed #adb5bd;
+  margin: 0 0.75rem;
+  position: relative;
+}
+
+.route-line i {
+  position: absolute;
+  top: -0.8rem;
+  left: 50%;
+  transform: translateX(-50%) rotate(90deg);
+  background: #fff;
+  padding: 0 0.25rem;
+  color: var(--brand);
+}
+
+.iata {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.card {
+  border: 0;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+}
+
+.table > :not(caption) > * > * {
+  vertical-align: middle;
+}
+
+.toast-container {
+  z-index: 1080;
+}

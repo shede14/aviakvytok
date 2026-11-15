@@ -1,4 +1,4 @@
-# АвіаКвиток — ЛР2 + ЛР3 (Spring Boot 4 + Hibernate + PostgreSQL + REST API)
+# АвіаКвиток — ЛР2–ЛР4 (Spring Boot 4 + PostgreSQL + Vue 3)
 
 ORM-модель і REST-сервіс (backend) системи продажу авіаквитків. Дисципліна «Технології Індустрії 4.0, 5.0 в інформаційних управляючих системах».
 
@@ -49,3 +49,19 @@ SELECT * FROM tickets;
 | `/api/bookings` | список, `/{id}` | створити | `/{id}` оновити | `/{id}` видалити |
 
 Колекція Postman: `postman/AviaKvytok_LR3.postman_collection.json` (змінна `baseUrl = http://localhost:8080`).
+
+## Клієнтська частина на Vue 3 (ЛР4)
+
+Тека `frontend/`: Vue 3.5 (Composition API), Vite 6, vue-router 4, axios, Bootstrap 5.
+
+Сторінки: Головна, Рейси (CRUD: перегляд, додавання, редагування, видалення), Авіакомпанії, Про проєкт.
+
+Запуск у режимі розробки (потрібен Node.js 18+ і запущений бекенд на порту 8080):
+
+```bash
+cd frontend
+npm install
+npm run dev        # http://localhost:5173
+```
+
+Зібрана версія вже лежить у `src/main/resources/static`, тому після запуску Spring Boot застосунок також доступний за адресою http://localhost:8080. Перезібрати її: `npm run build:spring`.
