@@ -1,6 +1,6 @@
-# АвіаКвиток — ЛР2 (Spring Boot + Hibernate + PostgreSQL)
+# АвіаКвиток — ЛР2 + ЛР3 (Spring Boot 4 + Hibernate + PostgreSQL + REST API)
 
-ORM-модель системи продажу авіаквитків. Дисципліна «Технології Індустрії 4.0, 5.0 в інформаційних управляючих системах».
+ORM-модель і REST-сервіс (backend) системи продажу авіаквитків. Дисципліна «Технології Індустрії 4.0, 5.0 в інформаційних управляючих системах».
 
 ## Сутності
 
@@ -37,3 +37,15 @@ SELECT * FROM bookings;
 SELECT * FROM booking_flights;
 SELECT * FROM tickets;
 ```
+
+## REST API (ЛР3)
+
+Архітектура: Controller → Service → Repository → Entity. Обмін даними у форматі JSON, CORS дозволено для `http://localhost:5173` (Vue.js).
+
+| Ресурс | GET | POST | PUT | DELETE |
+| --- | --- | --- | --- | --- |
+| `/api/airlines` | список, `/{id}` | створити | `/{id}` оновити | `/{id}` видалити |
+| `/api/flights` | список, `/{id}` | створити | `/{id}` оновити | `/{id}` видалити |
+| `/api/bookings` | список, `/{id}` | створити | `/{id}` оновити | `/{id}` видалити |
+
+Колекція Postman: `postman/AviaKvytok_LR3.postman_collection.json` (змінна `baseUrl = http://localhost:8080`).
