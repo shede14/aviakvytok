@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Кабінет')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="wrap">
+    <h1>Кабінет користувача</h1>
+    <p class="muted">Сторінка доступна ролям USER, MANAGER і ADMIN (<code>/user/**</code>).</p>
+
+    <div class="cards">
+        <div class="card stat"><div class="k">Користувач</div><div class="v" sec:authentication="name">user</div></div>
+        <div class="card stat"><div class="k">Ролі</div>
+            <div class="v small-v"><span th:each="a : ${#authentication.authorities}" class="pill role dark" th:text="${a.authority}">ROLE</span></div></div>
+        <div class="card stat"><div class="k">Сесія</div><div class="v small-v" th:text="${#strings.abbreviate(sessionId, 12)}">id</div></div>
+    </div>
+
+    <section class="card">
+        <h2>Мої бронювання</h2>
+        <table class="grid">
+            <thead><tr><th>Код</th><th>Рейс</th><th>Маршрут</th><th>Дата</th><th>Статус</th></tr></thead>
+            <tbody>
+            <tr><td><code>AB12CD</code></td><td>LO 752</td><td>Київ – Варшава</td><td>24.11.2026</td><td><span class="badge ok">Оплачено</span></td></tr>
+            <tr><td><code>EF34GH</code></td><td>LH 1491</td><td>Київ – Франкфурт</td><td>05.12.2026</td><td><span class="badge warn">Очікує оплати</span></td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="card">
+        <h2>Розділи, доступні вашим ролям</h2>
+        <ul class="links">
+            <li><a th:href="@{/user}">Кабінет користувача</a> — доступно</li>
+            <li sec:authorize="hasRole('MANAGER')"><a th:href="@{/manager}">Сторінка менеджера</a> — доступно</li>
+            <li sec:authorize="!hasRole('MANAGER')"><a th:href="@{/manager}">Сторінка менеджера</a> — <span class="deny">немає доступу (403)</span></li>
+            <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin}">Панель адміністратора</a> — доступно</li>
+            <li sec:authorize="!hasRole('ADMIN')"><a th:href="@{/admin}">Панель адміністратора</a> — <span class="deny">немає доступу (403)</span></li>
+        </ul>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

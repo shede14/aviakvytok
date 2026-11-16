@@ -1,0 +1,9 @@
+body { background: #f3f6fb; }
+.navbar-brand { font-weight: 700; letter-spacing: .2px; }
+.card { border-color: #e3e8f0; box-shadow: 0 1px 2px rgba(16, 24, 40, .04); }
+.kpi .value { font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.kpi .label { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: #6b7280; }
+.chart-box { position: relative; height: 270px; }
+.table-sm td, .table-sm th { font-size: .86rem; }
+.file-drop { border: 2px dashed #b6c4dc; border-radius: .6rem; background: #f8fafd; }
+.small-muted { font-size: .82rem; color: #6b7280; }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Менеджер')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="wrap">
+    <h1>Сторінка менеджера з продажу</h1>
+    <p class="muted">Доступ лише для ролі MANAGER (<code>/manager/**</code>).</p>
+
+    <div class="cards">
+        <div class="card stat"><div class="k">Продано сьогодні</div><div class="v">42</div><div class="s">квитки</div></div>
+        <div class="card stat"><div class="k">Виручка</div><div class="v">186 400 ₴</div><div class="s">оплачені квитки</div></div>
+        <div class="card stat"><div class="k">Повернення</div><div class="v">3</div><div class="s">очікують обробки</div></div>
+    </div>
+
+    <section class="card">
+        <h2>Користувачі онлайн</h2>
+        <table class="grid">
+            <thead><tr><th>Користувач</th><th>Ролі</th><th>Сесій</th><th>Остання дія</th></tr></thead>
+            <tbody>
+            <tr th:each="s : ${sessions}">
+                <td><b th:text="${s.username}">user</b></td>
+                <td><span th:each="r : ${s.roles}" class="pill role dark" th:text="${r}">ROLE</span></td>
+                <td th:text="${s.sessions.size()}">1</td>
+                <td th:text="${#dates.format(s.sessions[0].lastRequest, 'HH:mm:ss')}">12:00</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

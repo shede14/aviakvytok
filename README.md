@@ -1,6 +1,6 @@
-# АвіаКвиток — ЛР2–ЛР5 (Spring Boot + PostgreSQL + Vue 3 + Spring AI)
+# АвіаКвиток — ЛР2–ЛР7 (Spring Boot + PostgreSQL + Vue 3 + Spring AI + Spring Security)
 
-Система продажу авіаквитків: ORM-модель (ЛР2), REST-сервіс (ЛР3), клієнт на Vue 3 (ЛР4) та AI-модуль на Spring AI (ЛР5, тека `lr5-spring-ai`). Дисципліна «Технології Індустрії 4.0, 5.0 в інформаційних управляючих системах».
+Система продажу авіаквитків: ORM-модель (ЛР2), REST-сервіс (ЛР3), клієнт на Vue 3 (ЛР4), AI-модуль на Spring AI (ЛР5, `lr5-spring-ai`), імпорт з Excel і графіки (ЛР6, `lr6-excel-import`) та Spring Security (ЛР7, `lr7-security`). Дисципліна «Технології Індустрії 4.0, 5.0 в інформаційних управляючих системах».
 
 ## Сутності
 
@@ -72,3 +72,14 @@ npm run dev        # http://localhost:5173
 структурування неструктурованого бібліографічного опису статті в JSON і Java Record `SaveArticleToEntity` (Jackson).
 Сторінка Thymeleaf — http://localhost:8081, REST — `POST /api/generate-all`. Ключ — змінна середовища `OPENAI_API_KEY`;
 за замовчуванням використовується OpenAI-сумісний API Groq (модель `openai/gpt-oss-120b`). Детальніше — у [README модуля](lr5-spring-ai/README.md).
+
+## ЛР6. Імпорт з Excel і аналітика
+
+Модуль [`lr6-excel-import/`](lr6-excel-import/): Spring Boot 3 + Apache POI (`XSSFWorkbook`, `saveAll`) + PostgreSQL; клієнт Vue 3 + axios (FormData) + Chart.js
+(Bar / Pie). http://localhost:8082, `POST /api/import/excel`, `GET /api/stats`. Шаблон — `frontend/public/template.xlsx`. Детальніше — у [README модуля](lr6-excel-import/README.md).
+
+## ЛР7. Spring Security
+
+Модуль [`lr7-security/`](lr7-security/): Spring Boot 3 + Spring Security + Hibernate + Thymeleaf. Ролі USER / MANAGER / ADMIN (Many-to-Many),
+BCrypt, власна сторінка входу, `/admin/**`, `/manager/**`, `/user/**`, одна активна сесія на користувача (`SessionRegistry`).
+http://localhost:8083. Детальніше — у [README модуля](lr7-security/README.md).

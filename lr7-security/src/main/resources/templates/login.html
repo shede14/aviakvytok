@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Вхід')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="wrap narrow">
+    <section class="card">
+        <h1>Вхід до системи</h1>
+
+        <div class="alert error" th:if="${param.error}">Неправильний логін або пароль.</div>
+        <div class="alert warn" th:if="${param.expired}">
+            Вашу сесію завершено: під цим обліковим записом виконано вхід з іншого браузера або пристрою.
+        </div>
+        <div class="alert ok" th:if="${param.registered}">Акаунт створено. Увійдіть з новим логіном і паролем.</div>
+
+        <!-- форму обробляє UsernamePasswordAuthenticationFilter (POST /login) -->
+        <form th:action="@{/login}" method="post" class="form">
+            <label for="username">Логін</label>
+            <input id="username" name="username" autocomplete="username" required autofocus>
+            <label for="password">Пароль</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+            <button type="submit" class="btn btn-primary wide">Увійти</button>
+        </form>
+        <p class="muted center">Немає акаунта? <a th:href="@{/registration}">Зареєструватися</a></p>
+    </section>
+
+    <section class="card small">
+        <b>Демонстраційні облікові записи</b>
+        <table class="grid">
+            <tr><td><code>admin</code> / <code>admin123</code></td><td>ROLE_ADMIN</td></tr>
+            <tr><td><code>manager</code> / <code>manager123</code></td><td>ROLE_MANAGER</td></tr>
+            <tr><td><code>user</code> / <code>user123</code></td><td>ROLE_USER</td></tr>
+        </table>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

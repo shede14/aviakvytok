@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Адміністратор')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="wrap">
+    <h1>Панель адміністратора</h1>
+    <p class="muted">Доступ лише для ролі ADMIN (<code>/admin/**</code>).</p>
+
+    <section class="card">
+        <h2>Користувачі <small th:text="'(' + ${users.size()} + ')'">(3)</small></h2>
+        <table class="grid">
+            <thead><tr><th>ID</th><th>Логін</th><th>Ролі</th><th>Пароль у базі (BCrypt)</th><th>Створено</th><th>Сесій</th></tr></thead>
+            <tbody>
+            <tr th:each="u : ${users}">
+                <td th:text="${u.id}">1</td>
+                <td><b th:text="${u.username}">admin</b></td>
+                <td><span th:each="r : ${u.roles}" class="pill role dark" th:text="${r}">ROLE</span></td>
+                <td><code class="hash" th:text="${u.passwordHash}">$2a$10$...</code></td>
+                <td th:text="${#temporals.format(u.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2026</td>
+                <td><span class="badge" th:classappend="${u.activeSessions > 0} ? 'ok' : 'off'"
+                          th:text="${u.activeSessions > 0} ? 'онлайн (' + ${u.activeSessions} + ')' : '—'">—</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="card">
+        <h2>Активні сесії <small>(SessionRegistry)</small></h2>
+        <table class="grid">
+            <thead><tr><th>Користувач</th><th>Ролі</th><th>ID сесії</th><th>Остання дія</th></tr></thead>
+            <tbody>
+            <th:block th:each="v : ${sessions}">
+                <tr th:each="s : ${v.sessions}">
+                    <td><b th:text="${v.username}">user</b></td>
+                    <td><span th:each="r : ${v.roles}" class="pill role dark" th:text="${r}">ROLE</span></td>
+                    <td><code th:text="${s.id}">ABC…1234</code></td>
+                    <td th:text="${#dates.format(s.lastRequest, 'dd.MM.yyyy HH:mm:ss')}">12:00</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <p class="muted">Ліміт — одна сесія на користувача (<code>maximumSessions(1)</code>).</p>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

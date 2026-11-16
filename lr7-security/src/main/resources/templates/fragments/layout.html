@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' · АвіаКвиток'">АвіаКвиток</title>
+    <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:fragment="header" class="topbar">
+    <div class="wrap topbar-inner">
+        <a class="brand" th:href="@{/}">✈ АвіаКвиток <span>особистий кабінет</span></a>
+        <nav class="menu">
+            <a th:href="@{/}">Головна</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/user}">Кабінет</a>
+            <a sec:authorize="hasRole('MANAGER')" th:href="@{/manager}">Менеджер</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Адміністратор</a>
+        </nav>
+        <div class="who">
+            <th:block sec:authorize="isAuthenticated()">
+                <span class="pill">👤 <b sec:authentication="name">user</b></span>
+                <span class="pill role" th:each="a : ${#authentication.authorities}" th:text="${a.authority}">ROLE_USER</span>
+                <!-- вихід — POST-запит із CSRF-токеном -->
+                <form th:action="@{/logout}" method="post" class="inline">
+                    <button type="submit" class="btn btn-light">Вийти</button>
+                </form>
+            </th:block>
+            <th:block sec:authorize="isAnonymous()">
+                <a class="btn btn-light" th:href="@{/login}">Увійти</a>
+                <a class="btn btn-outline-light" th:href="@{/registration}">Реєстрація</a>
+            </th:block>
+        </div>
+    </div>
+</header>
+
+<footer th:fragment="footer" class="wrap foot">
+    ЛР7 · Spring Security · ТОВ «АвіаКвиток» (умовне) · Spring Boot 3, Hibernate, Thymeleaf, PostgreSQL
+</footer>
+</body>
+</html>

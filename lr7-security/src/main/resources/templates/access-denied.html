@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Доступ заборонено')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="wrap narrow">
+    <section class="card denied">
+        <div class="code">403</div>
+        <h1>Доступ заборонено (Forbidden)</h1>
+        <p>Для цієї сторінки вашої ролі недостатньо.</p>
+        <p sec:authorize="isAuthenticated()" class="muted">
+            Ви увійшли як <b sec:authentication="name">user</b> з ролями:
+            <span th:each="a : ${#authentication.authorities}" class="pill role dark" th:text="${a.authority}">ROLE</span>
+        </p>
+        <p class="muted" th:if="${requestedUri}">Запитана адреса: <code th:text="${requestedUri}">/admin</code></p>
+        <a class="btn btn-primary" th:href="@{/user}">До кабінету</a>
+        <a class="btn btn-outline" th:href="@{/}">На головну</a>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

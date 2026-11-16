@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/layout :: head('Головна')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="wrap">
+    <div class="alert ok" th:if="${param.logout}">Ви вийшли із системи.</div>
+
+    <section class="hero">
+        <h1>Особистий кабінет «АвіаКвиток»</h1>
+        <p>Бронювання квитків, робочі сторінки менеджера та адміністратора. Доступ до розділів
+            визначається роллю користувача.</p>
+        <div sec:authorize="isAnonymous()" class="actions">
+            <a class="btn btn-primary" th:href="@{/login}">Увійти</a>
+            <a class="btn btn-outline" th:href="@{/registration}">Створити акаунт</a>
+        </div>
+        <div sec:authorize="isAuthenticated()" class="actions">
+            Ви увійшли як <b sec:authentication="name">user</b>.
+            <a class="btn btn-primary" th:href="@{/user}">Перейти до кабінету</a>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Розділи і права доступу</h2>
+        <table class="grid">
+            <thead><tr><th>Розділ</th><th>Адреса</th><th>Хто має доступ</th></tr></thead>
+            <tbody>
+            <tr><td>Головна сторінка</td><td><code>/</code></td><td>усі</td></tr>
+            <tr><td>Вхід, реєстрація</td><td><code>/login</code>, <code>/registration</code></td><td>лише неавторизовані</td></tr>
+            <tr><td>Кабінет користувача</td><td><code>/user/**</code></td><td>USER, MANAGER, ADMIN</td></tr>
+            <tr><td>Сторінка менеджера</td><td><code>/manager/**</code></td><td>MANAGER</td></tr>
+            <tr><td>Панель адміністратора</td><td><code>/admin/**</code></td><td>ADMIN</td></tr>
+            </tbody>
+        </table>
+        <p class="muted">Один користувач може мати лише одну активну сесію: вхід з іншого браузера завершує попередню.</p>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

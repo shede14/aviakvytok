@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Реєстрація')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<main class="wrap narrow">
+    <section class="card">
+        <h1>Створення акаунта</h1>
+        <p class="muted">Новому користувачу автоматично призначається роль <code>ROLE_USER</code>.
+            Пароль зберігається в базі лише у вигляді хешу BCrypt.</p>
+
+        <form th:action="@{/registration}" th:object="${form}" method="post" class="form" novalidate>
+            <label for="username">Логін</label>
+            <input id="username" th:field="*{username}" th:classappend="${#fields.hasErrors('username')} ? 'invalid'">
+            <div class="field-error" th:errors="*{username}">помилка</div>
+
+            <label for="password">Пароль</label>
+            <input id="password" name="password" type="password" th:classappend="${#fields.hasErrors('password')} ? 'invalid'">
+            <div class="field-error" th:errors="*{password}">помилка</div>
+
+            <label for="confirmPassword">Повторіть пароль</label>
+            <input id="confirmPassword" name="confirmPassword" type="password" th:classappend="${#fields.hasErrors('confirmPassword')} ? 'invalid'">
+            <div class="field-error" th:errors="*{confirmPassword}">помилка</div>
+
+            <button type="submit" class="btn btn-primary wide">Зареєструватися</button>
+        </form>
+        <p class="muted center">Вже є акаунт? <a th:href="@{/login}">Увійти</a></p>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
