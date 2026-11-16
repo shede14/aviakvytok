@@ -65,3 +65,10 @@ npm run dev        # http://localhost:5173
 ```
 
 Зібрана версія вже лежить у `src/main/resources/static`, тому після запуску Spring Boot застосунок також доступний за адресою http://localhost:8080. Перезібрати її: `npm run build:spring`.
+
+## ЛР5. Інтеграція Generative AI (Spring AI)
+
+Окремий модуль [`lr5-spring-ai/`](lr5-spring-ai/) на Spring Boot 3.5 + Spring AI 1.0 (`OpenAiChatModel`, `PromptTemplate`):
+структурування неструктурованого бібліографічного опису статті в JSON і Java Record `SaveArticleToEntity` (Jackson).
+Сторінка Thymeleaf — http://localhost:8081, REST — `POST /api/generate-all`. Ключ — змінна середовища `OPENAI_API_KEY`;
+за замовчуванням використовується OpenAI-сумісний API Groq (модель `openai/gpt-oss-120b`). Детальніше — у [README модуля](lr5-spring-ai/README.md).

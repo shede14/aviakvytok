@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>АвіаКвиток · AI-структурування публікацій</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<header class="topbar">
+    <div class="wrap topbar-inner">
+        <div class="brand">✈ АвіаКвиток <span>AI-модуль</span></div>
+        <div class="meta">
+            <span class="pill" th:text="${'Модель: ' + modelName}">Модель</span>
+            <span class="pill">Spring AI · Spring Boot 3</span>
+            <span class="pill clock" th:text="${'🕒 ' + now}">clock</span>
+        </div>
+    </div>
+</header>
+
+<main class="wrap">
+    <h1>Структурування бібліографічних даних за допомогою LLM</h1>
+    <p class="lead">Вставте неструктурований опис статті (цитування). Сервіс сформує запит через
+        <code>PromptTemplate</code>, отримає JSON від моделі та перетворить його на Java Record
+        <code>SaveArticleToEntity</code>.</p>
+
+    <div class="alert warn" th:if="${apiKeyMissing}">
+        Змінну середовища <code>OPENAI_API_KEY</code> не задано — запити до моделі завершаться помилкою.
+    </div>
+
+    <form class="card" method="post" th:action="@{/generate-all}" id="form">
+        <label for="message">Текст статті (цитування)</label>
+        <textarea id="message" name="message" rows="4" required
+                  placeholder="Прізвище І.Б. Назва статті. Журнал, Том, Випуск, рік, місто, стор. 10-20. DOI ..."
+                  th:text="${message}"></textarea>
+        <div class="examples">
+            <span>Приклади:</span>
+            <button type="button" data-ex="1">Приклад з ТЗ (укр.)</button>
+            <button type="button" data-ex="2">Закордонна стаття (eng)</button>
+            <button type="button" data-ex="3">Тези конференції</button>
+            <button type="button" data-ex="4">Неповні дані</button>
+        </div>
+        <div class="actions">
+            <button type="submit" class="primary" id="submit">Згенерувати JSON</button>
+            <span class="loading" id="loading">⏳ Модель обробляє запит…</span>
+        </div>
+    </form>
+
+    <section th:if="${result != null}">
+        <div class="alert error" th:unless="${result.ok()}">
+            <b>Помилка.</b> <span th:text="${result.error()}">error</span>
+            <div class="small">Повернуто порожній об'єкт SaveArticleToEntity (усі поля "" або "0").</div>
+        </div>
+
+        <div class="stats">
+            <div class="stat"><div class="k">Час генерації</div>
+                <div class="v" th:text="${result.durationSeconds() + ' с'}">0 с</div>
+                <div class="s" th:text="${result.durationMs() + ' мс'}">мс</div></div>
+            <div class="stat"><div class="k">Запит / відповідь</div>
+                <div class="v small-v" th:text="${result.startedAt()}">start</div>
+                <div class="s" th:text="${'→ ' + result.finishedAt()}">end</div></div>
+            <div class="stat"><div class="k">Сторінок (LLM)</div>
+                <div class="v" th:text="${result.article().total_volume_of_printed_sheets()}">0</div>
+                <div class="s" th:text="${result.article().first_page() + '–' + result.article().last_page()}">p</div></div>
+            <div class="stat" th:classappend="${result.article().pagesMatch()} ? 'good' : 'bad'">
+                <div class="k">Перевірка Java</div>
+                <div class="v" th:text="${result.article().pagesCheckedByJava()}">0</div>
+                <div class="s" th:text="${result.article().pagesMatch()} ? (${result.article().total_volume_of_printed_sheets() == '0'} ? '✔ сторінок у тексті немає' : '✔ last − first + 1 збігається') : '✖ не збігається з LLM'">ok</div></div>
+            <div class="stat"><div class="k">Мова</div>
+                <div class="v" th:text="${result.article().language() == '' ? '—' : result.article().language()}">ukr</div>
+                <div class="s" th:text="${result.article().published_in_ukraine() == '1' ? 'видано в Україні' : (result.article().published_abroad() == '1' ? 'видано за кордоном' : 'країна невідома')}">s</div></div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2>Структурований результат <small>SaveArticleToEntity</small></h2>
+                <table class="fields">
+                    <tr th:each="e : ${result.article().asMap()}"
+                        th:classappend="${e.value == '' or e.value == '0'} ? 'empty'">
+                        <td class="key" th:text="${e.key}">key</td>
+                        <td th:text="${e.value == '' ? '&quot;&quot;' : e.value}">value</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card">
+                <h2>Відповідь моделі <small>після очищення</small></h2>
+                <pre class="json" th:text="${result.cleanedJson() == '' ? '—' : result.cleanedJson()}">{}</pre>
+                <details th:if="${result.rawResponse() != ''}">
+                    <summary>«Сира» відповідь моделі (до очищення)</summary>
+                    <pre class="json raw" th:text="${result.rawResponse()}">raw</pre>
+                </details>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="wrap foot">ЛР5 · Технології Індустрії 4.0, 5.0 в ІУС · ТОВ «АвіаКвиток» (умовне) ·
+    POST <code>/generate-all</code> (форма) · POST <code>/api/generate-all</code> (REST)</footer>
+
+<script>
+    const EX = {
+        1: 'Лозовик Ю.М. Розвиток штучного інтелекту в економіці. Журнал "Цифрова Економіка", Том 5, Випуск 2, 2025 рік, Київ, стор. 10-20. DOI: 10.1234/example.',
+        2: 'Kowalski J., Schmidt A., Novak P. Dynamic pricing of airline tickets using reinforcement learning. Journal of Air Transport Management, Vol. 118, No. 4, 2024, Elsevier, Amsterdam, Netherlands, pp. 102-117. DOI: 10.1016/j.jairtraman.2024.102117. ISSN 0969-6997. Indexed in Scopus and Web of Science.',
+        3: 'Коць Я.О., Лозовик Ю.М. Цифрові двійники в системах продажу авіаквитків // Матеріали ІІІ Міжнародної науково-практичної конференції «Індустрія 4.0 в економіці», 14-15 березня 2026 р., Львів: ЛНУ, с. 45-47. Ключові слова: Індустрія 4.0, цифровий двійник, авіаквитки.',
+        4: 'Петренко О. Блокчейн у логістиці авіаперевезень, 2023.'
+    };
+    document.querySelectorAll('[data-ex]').forEach(b =>
+        b.addEventListener('click', () => { document.getElementById('message').value = EX[b.dataset.ex]; }));
+    document.getElementById('form').addEventListener('submit', () => {
+        document.getElementById('submit').disabled = true;
+        document.getElementById('loading').style.display = 'inline';
+    });
+</script>
+</body>
+</html>
